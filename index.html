@@ -4,18 +4,48 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .users {
+            color: salmon;
+        }
+    </style>
     <title>User-API</title>
 </head>
 <body>
+        <div id="users">
+
+        </div>
+
+        <div id="get-details">
+
+        </div>
+
     <script>
         fetch('https://jsonplaceholder.typicode.com/users')
         .then(res => res.json())
         .then(data => {
+            const userContainer = document.getElementById('users');
             for (let i = 0; i < data.length; i++) {
-                const user = data[i];
-                console.log(user);
-            }
+                const users = data[i];
+                const usersName = users.name;
+                const p = document.createElement('p');
+                p.innerHTML = `
+                <p class="users">Name: <strong> ${usersName}</strong> <button onclick="getDetails(${users.id})">Get Details -${users.id}</button></p>`;
+                userContainer.appendChild(p);
+            };
         })
+        function getDetails(userId) {
+            fetch(`https://jsonplaceholder.typicode.com/users/${userId}`)
+            .then(res => res.json())
+            .then(data => {
+                const userDetails = document.getElementById('get-details');
+                userDetails.innerHTML = `
+                 <h1>${data.name}</h1>
+                 <h4>email: ${data.email}</h4>
+                 <p>Phone : ${data.phone}</p>
+                 `
+            })
+        }
     </script>
 </body>
 </html>
